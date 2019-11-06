@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPlainTextEdit
 from PyQt5 import uic as render
 import request as req
 import database as db
@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         render.loadUi("./UI/Login.ui", self)
         self.pushEnter.clicked.connect(self.enter)
+        self.run_home()
 
     def enter(self):
         """ Вход и авторизация в системе """
@@ -28,7 +29,7 @@ class MainWindow(QMainWindow):
                     database.add_auto_enter()
                 else:
                     database.remove_auto_enter()
-                self.run()
+                self.run_home()
                 print('Entered')
             except EnvironmentError:
                 render.loadUi("./UI/LoginError.ui", self)
