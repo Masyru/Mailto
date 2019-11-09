@@ -4,6 +4,7 @@ from PyQt5 import uic as render
 import request as req
 import database as db
 import time
+import components as Row
 
 
 class MainWindow(QMainWindow):
@@ -12,6 +13,7 @@ class MainWindow(QMainWindow):
         self.mail = db.Mail()
         render.loadUi("./UI/Login.ui", self)
         self.pushEnter.clicked.connect(self.enter)
+        self.run_history()
 
     def enter(self):
         """ Вход и авторизация в системе """
@@ -46,6 +48,14 @@ class MainWindow(QMainWindow):
         render.loadUi("./UI/History.ui", self)
         self.setWindowTitle('История писем - History')
         self.WriteBtn.clicked.connect(self.run_home)
+        results = db.Mail().look_for_message()
+        x, y = 10, 90
+        # for i in results:
+        #     obj = Row.Component().row_data(i[0], i[1], i[2], i[3])
+        #     obj.setObjectName(f"Row{y}")
+        #     obj.move((x, y))
+        #     y += 151
+
 
     def module_success(self):
         render.loadUi("./UI.SuccessSent.ui", self)
@@ -59,8 +69,9 @@ class MainWindow(QMainWindow):
         print(topic, mails, text)
         try:
             self.server.send_email(topic, mails, text)
+            print("1 ok")
             self.mail.add_mail(mails, topic, text)
-            self.module_success()
+            print("2 ok")
         except EnvironmentError:
             render.loadUi('./UI/HomeError.ui', self)
             self.setWindowTitle('Ошибка отправки - Home')

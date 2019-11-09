@@ -24,4 +24,3 @@ class Request:
 
         self.server.sendmail(self.login, [to_addr], BODY)
 
-

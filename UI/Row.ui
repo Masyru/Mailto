@@ -16,16 +16,16 @@
   <widget class="QWidget" name="MyRow" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>20</x>
      <y>20</y>
-     <width>791</width>
+     <width>761</width>
      <height>141</height>
     </rect>
    </property>
    <widget class="QPushButton" name="DeleteBtn">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>650</x>
       <y>110</y>
       <width>88</width>
       <height>27</height>
@@ -40,7 +40,7 @@
      <rect>
       <x>0</x>
       <y>30</y>
-      <width>501</width>
+      <width>451</width>
       <height>111</height>
      </rect>
     </property>
@@ -50,7 +50,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>501</width>
+      <width>451</width>
       <height>27</height>
      </rect>
     </property>
@@ -61,7 +61,7 @@
    <widget class="QListView" name="listMails">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>460</x>
       <y>0</y>
       <width>181</width>
       <height>141</height>
@@ -71,7 +71,7 @@
    <widget class="QPushButton" name="RepeteBtn">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>650</x>
       <y>30</y>
       <width>88</width>
       <height>27</height>
@@ -84,7 +84,7 @@
    <widget class="QPushButton" name="EditBtn">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>650</x>
       <y>0</y>
       <width>88</width>
       <height>27</height>
