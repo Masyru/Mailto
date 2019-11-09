@@ -28,6 +28,8 @@ class Login:
         if result:
             login, password = result
             self.currentUser = login
+            return login, password
+        return ('', '')
 
     def add_auto_enter(self):
         self.cur.execute("""
@@ -56,9 +58,6 @@ class Login:
 
 class Mail:
     def __init__(self):
-        self.open()
-
-    def open(self):
         self.data = sqlite3.connect("Mail.db")
         self.cur = self.data.cursor()
 
@@ -73,9 +72,9 @@ class Mail:
                                 title, text, mailto, time, year, notes
                                 )
                              VALUES(
-                                    ?, ?, ?, ?, ?, NULL
+                                    ?, ?, ?, ?, ?, ?
                                 )
-                        """, (topic, message, desk_mails, now, year))
+                        """, (topic, message, desk_mails, now, year, "Не указано"))
         self.data.commit()
 
     def look_for_message(self):

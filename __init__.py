@@ -13,14 +13,32 @@ class MainWindow(QMainWindow):
         self.mail = db.Mail()
         render.loadUi("./UI/Login.ui", self)
         self.pushEnter.clicked.connect(self.enter)
-        self.run_history()
+
+    def auto_check(self):
+        login, password = db.Login().check_auto_enter()
+        self.tried = 0
+        if login and password and not self.tried:
+            try:
+                self.server = req.Request(login, password)
+                self.server.server.ehlo()
+                print('Entered')
+                return True
+            except EnvironmentError:
+                render.loadUi("./UI/LoginError.ui", self)
+                self.pushEnter.clicked.connect(self.enter)
+                self.tried = 1
+        return False
 
     def enter(self):
         """ Вход и авторизация в системе """
+        check = self.auto_check()
         login = self.Login.text()
         password = self.Password.text()
         rem = self.checkBox.isChecked()
-        if login and password:
+        if check:
+            self.run_home()
+            print('Entered')
+        elif login and password:
             try:
                 self.server = req.Request(login, password)
                 self.server.server.ehlo()
@@ -35,6 +53,7 @@ class MainWindow(QMainWindow):
             except EnvironmentError:
                 render.loadUi("./UI/LoginError.ui", self)
                 self.pushEnter.clicked.connect(self.enter)
+
 
     def run_home(self):
         """ Главное окно написания письма """
@@ -56,7 +75,6 @@ class MainWindow(QMainWindow):
         #     obj.move((x, y))
         #     y += 151
 
-
     def module_success(self):
         render.loadUi("./UI.SuccessSent.ui", self)
         time.sleep(1.5)
@@ -67,15 +85,16 @@ class MainWindow(QMainWindow):
         mails = list(map(str.strip, self.To.text().split()))
         text = self.Text.toPlainText().strip()
         print(topic, mails, text)
-        try:
-            self.server.send_email(topic, mails, text)
-            print("1 ok")
-            self.mail.add_mail(mails, topic, text)
-            print("2 ok")
-        except EnvironmentError:
-            render.loadUi('./UI/HomeError.ui', self)
-            self.setWindowTitle('Ошибка отправки - Home')
-            self.HistoryBtn.clicked.connect(self.run_history)
+        # try:
+        self.server.send_email(topic, mails, text)
+        print("1 ok")
+        self.mail.add_mail(mails, topic, text)
+        self.module_success()
+        print("2 ok")
+        # except EnvironmentError:
+        #     render.loadUi('./UI/HomeError.ui', self)
+        #     self.setWindowTitle('Ошибка отправки - Home')
+        #     self.HistoryBtn.clicked.connect(self.run_history)
 
 
 if __name__ == '__main__':
