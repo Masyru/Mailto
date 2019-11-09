@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 
 class Login:
@@ -10,12 +11,14 @@ class Login:
                             INSERT INTO Login(login, password) VALUES(?, ?)
                         """, (login, password))
         self.currentUser = login
+        self.data.commit()
 
     def delete_last(self):
         self.cur.execute("""
                                     DELETE from Login
                                     WHERE login = ?
                                 """, (self.currentUser, ))
+        self.data.commit()
 
     def check_auto_enter(self):
         result = self.cur.execute("""
@@ -32,6 +35,7 @@ class Login:
                             SET Auto = TRUE
                             WHERE login = ?
                         """, (self.currentUser,))
+        self.data.commit()
 
     def remove_auto_enter(self):
         self.cur.execute("""
@@ -39,6 +43,7 @@ class Login:
                                     SET Auto = FALSE
                                     WHERE login = ?
                                 """, (self.currentUser,))
+        self.data.commit()
 
     def open(self):
         self.data = sqlite3.connect("Mail.db")
@@ -61,16 +66,19 @@ class Mail:
         self.data.close()
 
     def add_mail(self, desk_mails, topic, message):
+        now = f'{datetime.datetime.today().strftime("%H:%M")} {datetime.date.today().day}.{datetime.date.today().month}'
+        year = f'{datetime.date.today().year}'
         self.cur.execute("""
                             INSERT INTO History(
-                                title, text, mailto
+                                title, text, mailto, time, year, notes
                                 )
                              VALUES(
-                                    ?, ?, ?
+                                    ?, ?, ?, ?, ?, NULL
                                 )
-                        """, (topic, message, desk_mails))
+                        """, (topic, message, desk_mails, now, year))
+        self.data.commit()
 
-    def loof_for_message(self):
+    def look_for_message(self):
         return self.cur.execute("""
                             SELECT id, title, text, mailto FROM History
                         """).fetchall()
@@ -80,6 +88,4 @@ class Mail:
                             DELETE from History
                             WHERE id = ?
                         """, (id, ))
-
-
-mail = Mail().add_mail("a", 'a', 'mima')
+        self.data.commit()

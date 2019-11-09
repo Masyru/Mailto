@@ -60,7 +60,8 @@ class MainWindow(QMainWindow):
         try:
             self.server.send_email(topic, mails, text)
             self.mail.add_mail(mails, topic, text)
-        finally:
+            self.module_success()
+        except EnvironmentError:
             render.loadUi('./UI/HomeError.ui', self)
             self.setWindowTitle('Ошибка отправки - Home')
             self.HistoryBtn.clicked.connect(self.run_history)
